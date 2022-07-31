@@ -51,6 +51,7 @@ var buttons = new Buttons(onButtonDown, onButtonUp);
 
 let scene;  
 let clock = new THREE.Clock(); 
+const clock_2 = new THREE.Clock();
 let renderer;   
 let light;
 let airplaneExists = false
@@ -141,7 +142,7 @@ button.addEventListener("click", onButtonPressed);
 
 
 
-  function onButtonPressed() {
+  function onButtonPressed() {    
     const loadingScreen = document.getElementById( 'loading-screen' );
     loadingScreen.transition = 0;
     backgroundmusic();
@@ -182,7 +183,8 @@ camera.add(listener);
 const audioLoader = new THREE.AudioLoader();
 
 function backgroundmusic(){  //som de fundo
-
+  clock_2.start()
+  console.log('começou')
   const backgroundsound1 = new THREE.Audio(listener);
   audioLoader.load('assets/backgroundmusica.mp3', function(buffer){
     backgroundsound1.setBuffer(buffer);
@@ -253,6 +255,29 @@ export function enemyshoot(){  //inimigo atira
 
 }
 
+export function missileShoot(){
+  const enemyshootsound = new THREE.Audio(listener);
+  audioLoader.load('assets/rocket.mp3', function(buffer){
+    enemyshootsound.setBuffer(buffer);
+    enemyshootsound.setLoop(false);
+    enemyshootsound.setVolume(0.1);
+    enemyshootsound.play();
+  
+  
+  
+  })
+}
+
+export function explosionAudio(){
+  const mainshootsound = new THREE.Audio(listener);
+    audioLoader.load('assets/explosion.mp3', function(buffer){
+        mainshootsound.setBuffer(buffer);
+        mainshootsound.setLoop(false);
+        mainshootsound.setVolume(0.1);
+        mainshootsound.play();
+    })
+}
+
 
 
 // Criação do ShadowMap
@@ -268,7 +293,7 @@ var knotBBox = buildAirplane(scene);
 scene.add(plane);
 
 //Outros
-scene.add(axesHelper);
+//scene.add(axesHelper);
 
 //VIDA -------------------------------------------------------------------
 
@@ -327,7 +352,7 @@ scene.isPlay = false;
 
 let screenX = window.screen.availWidth;
 
-if(screenX>600) scene.plataforma = "pc";
+if(screenX>400) scene.plataforma = "pc";
 else scene.plataforma = "mobile";
 
 addJoysticks(scene);
@@ -336,7 +361,14 @@ render();
 
 
 function render() {
-  
+  if(clock_2.getElapsedTime() >= 140){
+    scene.godmode = true
+    document.getElementById("victory").style.display = "block";
+    if(clock_2.getElapsedTime() >= 142){
+      window.location.reload();
+    }
+    //console.log('acabou o jogo')
+  }
   if (!scene.isPlay) return;
   requestAnimationFrame(render);
 
@@ -373,8 +405,6 @@ function render() {
 
  export function contaVidas(scene){
   //VIDA -------------------------------------------------------------------
-  
-  console.log(scene.vida);
   
   if(scene.vida ==1){ 
     scene.remove(vida1);   //REMOVE TODAS PRA NAO TER SOBREPOSIÇÃO E ADICIONA DEPOIS

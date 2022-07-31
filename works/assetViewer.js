@@ -34,7 +34,7 @@ import {initRenderer,
         
         // Show axes (parameter is size of each axis)
         let axesHelper = new THREE.AxesHelper( 12 );
-        scene.add( axesHelper );
+        //scene.add( axesHelper );
         var ambientlightObjt = new THREE.AmbientLight(0xffffff,0.2)
     //LUZ
     //hemisphere light
@@ -63,13 +63,13 @@ import {initRenderer,
 
 
         // avião inimigo 1 e 4(movimento vertical e diagonal)
-        loader.load('assets/enemyair1.glb', function(gltf){
-            let enemy1 = gltf.scene
-            scene.add(enemy1)
-            enemy1.position.set(10, 5, 0)
-            enemy1.scale.set(0.25, 0.25, 0.25)
-            enemy1.rotateY(degToReg(90))
-        })  
+        loader.load('assets/555.glb', function(gltf){
+          let enemy1 = gltf.scene
+          scene.add(enemy1)
+          enemy1.position.set(10, 5, 0)
+          enemy1.scale.set(0.020, 0.020, 0.020)
+          enemy1.rotateY(degToReg(0))
+      })  
 
          // avião inimigo 2(movimento Horizontal)
          loader.load('assets/enemyair2.glb', function(gltf){
@@ -105,32 +105,6 @@ import {initRenderer,
         //vida
         life(scene,-20,0); 
 
-        //vale
-
-        const mloader = new MTLLoader();
-const loader3 = new OBJLoader();
-let terrain = null
-
-mloader.load('assets/RioB.mtl', (mtl) => {
-  mtl.preload();
-  loader3.setMaterials(mtl)
-  mtl.metalness = 0;
-  mtl.roughness = 1;
-  loader3.load('assets/RioB.obj', function(obj){
-    obj.position.set(35, 4, 0)
-    let scale = 6
-    obj.scale.set(1.5, 1.5, 1.5)
-    scene.add(obj)
-    terrain = obj
-    //Sombras
-    obj.traverse((node) => {
-      if(node.isMesh) {
-          node.receiveShadow = true
-          node.material.shininess = 0
-      } 
-    })
-  }, null, null)
-})
 
 
 

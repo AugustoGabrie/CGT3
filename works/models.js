@@ -3,7 +3,7 @@ import { RGBADepthPacking } from 'three';
 import { Box3, Vector3 } from '../build/three.module.js';
 import { Vector } from '../libs/other/CSGMesh.js';
 import { degToReg, getAirplane, getMovementBorders } from './convencoes.js';
-import { contaVidas } from './index.js';
+import { contaVidas, explosionAudio, mainshoot, missileShoot } from './index.js';
 import {airplanedamage, enemyshoot}from './index.js';
 import {GLTFLoader} from './loaders/GLTFLoader.js';
 import { MTLLoader } from './loaders/MTLLoader.js';
@@ -186,6 +186,7 @@ function getRandomInt(min, max) {
 
 
 export function BuildProjeteis(){
+    mainshoot();
     const geometry = new THREE.SphereGeometry( 0.25, 16, 8 );
     const material = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
     const sphere = new THREE.Mesh( geometry, material );
@@ -199,6 +200,7 @@ export function BuildProjeteis(){
 }
 
 export function BuildMissale(){
+    missileShoot();
     const geometry = new THREE.SphereGeometry( 0.25, 16, 8 );
     const material = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
     const sphere = new THREE.Mesh( geometry, material );
@@ -291,6 +293,7 @@ function createExplosion(scene, x, y, z){
     explosion.rotateX(-Math.PI/2)
     explosion.name = EXPLOSION_NAME
     scene.add( explosion );
+    explosionAudio();
 }
 
 export function animateExplosion(scene){
@@ -425,12 +428,13 @@ export function checkCollisions(scene, knotBBox){
   export function createVerticalEnemy(scene, x, z){
     let airplane = getAirplane(scene);
     const loader = new GLTFLoader();
-    loader.load('assets/enemyair1.glb', function(gltf){
+    loader.load('assets/555.glb', function(gltf){
         let enemy = gltf.scene
         scene.add(enemy)
         enemy.position.set(x, 6, z)
-        enemy.rotateY(degToReg(90))
-        enemy.scale.set(AIR_SCALE, AIR_SCALE, AIR_SCALE)
+        //enemy.rotateY(degToReg(90))
+        enemy.scale.set(0.01, 0.01, 0.01)
+        enemy.rotateY(degToReg(0))
         enemy.name = VERTICAL_ENEMY_NAME
         enemy.shootInterval = VERTICAL_SHOTS_PER_SECOND
         enemy.receiveShadow=true;
@@ -476,11 +480,11 @@ export function checkCollisions(scene, knotBBox){
   export function createDiagonalEnemy(scene, x, z){
     let airplane = getAirplane(scene);
     const loader = new GLTFLoader();
-    loader.load('assets/enemyair1.glb', function(gltf){
+    loader.load('assets/555.glb', function(gltf){
         let enemy = gltf.scene
         scene.add(enemy)
         enemy.position.set(x, 6, z)
-        enemy.scale.set(AIR_SCALE, AIR_SCALE, AIR_SCALE)
+        enemy.scale.set(0.01, 0.01, 0.01)
         enemy.name = DIAGONAL_ENEMY_NAME
         enemy.shootInterval = DIAGONAL_SHOTS_PER_SECOND
         if(x <= 0){
@@ -568,6 +572,7 @@ export function checkCollisions(scene, knotBBox){
             //mtl.metalness = 0;
             //mtl.roughness = 1;
             oloader.load('assets/missile.obj', function(obj){
+                enemyshoot();
                 let missile = obj
                 scene.add(missile)
                 missile.position.set(tank.position.x + 0.5, tank.position.y + 2, tank.position.z)
@@ -630,7 +635,7 @@ export function checkCollisions(scene, knotBBox){
         let enemyIsClose = Math.abs(distanceZ) <= ENEMY_FAR //avião só anda ou atira se tiver perto do player
         enemy.shootInterval += delta;
         if(enemyIsClose){
-            enemy.translateX(-DIAGONAL_SPEED);
+            enemy.translateZ(DIAGONAL_SPEED);
         }
         
     })
@@ -638,7 +643,7 @@ export function checkCollisions(scene, knotBBox){
     //Avião vertical
 
     verticalEnemies.forEach((enemy) => {
-        enemy.translateX(-VERTICAL_SPEED)
+        enemy.translateZ(VERTICAL_SPEED)
     })
 
     //Avião que anda em arco
