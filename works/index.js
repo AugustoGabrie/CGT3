@@ -327,7 +327,7 @@ scene.isPlay = false;
 
 let screenX = window.screen.availWidth;
 
-if(screenX>400) scene.plataforma = "pc";
+if(screenX>600) scene.plataforma = "pc";
 else scene.plataforma = "mobile";
 
 addJoysticks(scene);
