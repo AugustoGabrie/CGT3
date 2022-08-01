@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from '../build/jsm/controls/OrbitControls.js';
 import { TetrahedronGeometry } from '../build/three.module.js';
 
-export function buildCamera(){
+export function buildCamera(scene){
         //camera details:
         const fov = 101;
         const near = 0.1;
@@ -12,7 +12,13 @@ export function buildCamera(){
         const camera = new THREE.PerspectiveCamera(fov, window.innerWidth/window.innerHeight, near, far);
         camera.lookAt(0,1,0);
         camera.rotateX(-2.75);
-        camera.position.set(0,15,252.7);
+        
+
+        if(scene.plataforma == 'pc'){
+            camera.position.set(0,15,252.7);
+        }else{
+            camera.position.set(0,30,252.7);
+        }
 
         return camera;
 

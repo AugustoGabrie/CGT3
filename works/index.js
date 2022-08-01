@@ -72,12 +72,21 @@ renderer.shadowMap.enabled = true;
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("webgl-output").appendChild(renderer.domElement);
+
+scene.isPlay = false;
+
+let screenX = window.screen.availWidth;
+
+if(screenX>600) scene.plataforma = "pc";
+else scene.plataforma = "mobile";
+
+
 //Inimigos
 //(Criar função para mapear tudo dps, sem poluir o index)
 
 //---------------Construção da Câmera---------------
 var cameraHolder = new THREE.Object3D(); //Objeto que carrega a câmera
-var camera = buildCamera();
+var camera = buildCamera(scene);
 cameraHolder.add(camera);
 scene.add(cameraHolder);
 let cylindergeometry = new THREE.CylinderGeometry( 5, 5, 1, 100 );
@@ -354,12 +363,7 @@ scene.godmode = false;
 scene.vida = 5;  //VIDA
 contaVidas(scene);
 
-scene.isPlay = false;
 
-let screenX = window.screen.availWidth;
-
-if(screenX>600) scene.plataforma = "pc";
-else scene.plataforma = "mobile";
 
 addJoysticks(scene);
 
