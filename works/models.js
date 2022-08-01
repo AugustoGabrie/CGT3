@@ -428,17 +428,17 @@ export function checkCollisions(scene, knotBBox){
   export function createVerticalEnemy(scene, x, z){
     let airplane = getAirplane(scene);
     const loader = new GLTFLoader();
-    loader.load('assets/555.glb', function(gltf){
+    loader.load('assets/333.glb', function(gltf){
         let enemy = gltf.scene
         scene.add(enemy)
         enemy.position.set(x, 6, z)
-        //enemy.rotateY(degToReg(90))
-        enemy.scale.set(0.01, 0.01, 0.01)
+        enemy.rotateY(degToReg(-90))
+        enemy.scale.set(0.2, 0.2, 0.2)
         enemy.rotateY(degToReg(0))
         enemy.name = VERTICAL_ENEMY_NAME
         enemy.shootInterval = VERTICAL_SHOTS_PER_SECOND
-        enemy.receiveShadow=true;
-        enemy.castShadow=true;
+        // enemy.receiveShadow=true;
+        // enemy.castShadow=true;
 
         let collision = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()); 
         collision.setFromObject(enemy);
@@ -446,6 +446,7 @@ export function checkCollisions(scene, knotBBox){
 
         enemy.traverse((node) => {
             if(node.isMesh) {
+                console.log(node);
                 node.castShadow = true
             } 
         })
@@ -480,11 +481,11 @@ export function checkCollisions(scene, knotBBox){
   export function createDiagonalEnemy(scene, x, z){
     let airplane = getAirplane(scene);
     const loader = new GLTFLoader();
-    loader.load('assets/555.glb', function(gltf){
+    loader.load('assets/333.glb', function(gltf){
         let enemy = gltf.scene
         scene.add(enemy)
         enemy.position.set(x, 6, z)
-        enemy.scale.set(0.01, 0.01, 0.01)
+        enemy.scale.set(0.2, 0.2, 0.2)
         enemy.name = DIAGONAL_ENEMY_NAME
         enemy.shootInterval = DIAGONAL_SHOTS_PER_SECOND
         if(x <= 0){
@@ -563,38 +564,61 @@ export function checkCollisions(scene, knotBBox){
         if(tank.shootInterval >= 1 / TANK_SHOTS_PER_SECOND && tankIsClose){
             tank.shootInterval = 0
 
-        let mloader = new MTLLoader();
-        mloader.load('assets/missile.mtl', (mtl) => {
-            mtl.preload();
-            let oloader = new OBJLoader();
-            oloader.setMaterials(mtl)
-            console.log(mtl)
-            //mtl.metalness = 0;
-            //mtl.roughness = 1;
-            oloader.load('assets/missile.obj', function(obj){
-                enemyshoot();
-                let missile = obj
-                scene.add(missile)
-                missile.position.set(tank.position.x + 0.5, tank.position.y + 2, tank.position.z)
-                missile.name = TANK_PROJECTILE_NAME;
-                missile.lockOn = false; //Variável que define se o projétil já está indo em direção do avião
-                missile.rotating = true;
-                missile.speedX = -1; //Variáveis de velocidade que controlam o movimento do projétil
-                missile.speedZ = -1;
-                missile.receiveShadow=true;
-                missile.castShadow=true;
-                missile.scale.set(0.08, 0.08, 0.08)
-                var bbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()).setFromObject(missile); //esfera que vai detectar a colisão
-                missile.bound = bbox  
-                //Sombras
-                missile.traverse((node) => {
-                    if(node.isMesh) {
-                        node.castShadow = true
-                    } 
-                })
-    
-            }, null, null)
+        let loader = new GLTFLoader();
+        loader.load('assets/rocket.glb', (obj) => {
+            enemyshoot();
+            let missile = obj.scene
+            scene.add(missile)
+            missile.position.set(tank.position.x + 0.5, tank.position.y + 2, tank.position.z)
+            missile.name = TANK_PROJECTILE_NAME;
+            missile.lockOn = false; //Variável que define se o projétil já está indo em direção do avião
+            missile.rotating = true;
+            missile.speedX = -1; //Variáveis de velocidade que controlam o movimento do projétil
+            missile.speedZ = -1;
+            missile.receiveShadow=true;
+            missile.castShadow=true;
+            missile.scale.set(0.4, 0.4, 0.4 )
+            var bbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()).setFromObject(missile); //esfera que vai detectar a colisão
+            missile.bound = bbox  
+            //Sombras
+            missile.traverse((node) => {
+                if(node.isMesh) {
+                    node.castShadow = true
+                } 
+            })
         })
+        // let mloader = new MTLLoader();
+        // mloader.load('assets/missile.mtl', (mtl) => {
+        //     mtl.preload();
+        //     let oloader = new OBJLoader();
+        //     oloader.setMaterials(mtl)
+        //     console.log(mtl)
+        //     //mtl.metalness = 0;
+        //     //mtl.roughness = 1;
+        //     oloader.load('assets/missile.obj', function(obj){
+        //         enemyshoot();
+        //         let missile = obj
+        //         scene.add(missile)
+        //         missile.position.set(tank.position.x + 0.5, tank.position.y + 2, tank.position.z)
+        //         missile.name = TANK_PROJECTILE_NAME;
+        //         missile.lockOn = false; //Variável que define se o projétil já está indo em direção do avião
+        //         missile.rotating = true;
+        //         missile.speedX = -1; //Variáveis de velocidade que controlam o movimento do projétil
+        //         missile.speedZ = -1;
+        //         missile.receiveShadow=true;
+        //         missile.castShadow=true;
+        //         missile.scale.set(0.08, 0.08, 0.08)
+        //         var bbox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()).setFromObject(missile); //esfera que vai detectar a colisão
+        //         missile.bound = bbox  
+        //         //Sombras
+        //         missile.traverse((node) => {
+        //             if(node.isMesh) {
+        //                 node.castShadow = true
+        //             } 
+        //         })
+    
+        //     }, null, null)
+        // })
 
             // const geometry = new THREE.SphereGeometry( 0.25, 16, 8 );
             // const material = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
@@ -635,7 +659,7 @@ export function checkCollisions(scene, knotBBox){
         let enemyIsClose = Math.abs(distanceZ) <= ENEMY_FAR //avião só anda ou atira se tiver perto do player
         enemy.shootInterval += delta;
         if(enemyIsClose){
-            enemy.translateZ(DIAGONAL_SPEED);
+            enemy.translateX(DIAGONAL_SPEED);
         }
         
     })
@@ -643,7 +667,7 @@ export function checkCollisions(scene, knotBBox){
     //Avião vertical
 
     verticalEnemies.forEach((enemy) => {
-        enemy.translateZ(VERTICAL_SPEED)
+        enemy.translateX(VERTICAL_SPEED);
     })
 
     //Avião que anda em arco
@@ -740,13 +764,13 @@ export function checkCollisions(scene, knotBBox){
                                 sum += (3/4) * Math.PI
                             }
                         }
-                        //sphere.rotation.y = Math.atan(Math.abs(distanceZ)/Math.abs(distanceX)) + sum
+                        sphere.rotation.y = Math.atan(Math.abs(distanceZ)/Math.abs(distanceX)) + sum
                         if (sphere.rotation.z >= degToReg(90)){
                             sphere.rotating = false
                         }
                     }else{
-                        sphere.up.set(1, -1, 1)
-                        sphere.lookAt(airplane.position.x, airplane.position.y, airplane.position.z - OFFSET_Z)
+                        //sphere.up.set(1, -1, 1)
+                        //sphere.lookAt(airplane.position.x, airplane.position.y, airplane.position.z - OFFSET_Z)
                         let distanceX = airplane.position.x - sphere.position.x;
                         let distanceZ = airplane.position.z - sphere.position.z - OFFSET_Z;
                         sphere.speedX = distanceX / TIME_TO_PLANE;

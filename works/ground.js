@@ -194,7 +194,9 @@ function createTerrains(scene){
             waterNormals: new THREE.TextureLoader().load( 'assets/waternormals.jpg', function ( texture ) {
                 
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                texture.receiveShadow = true;
                 
+
             } ),
             waterColor: 0xbbbbb,
             sunColor: 0x111111,
@@ -204,6 +206,7 @@ function createTerrains(scene){
         );
         water.position.set(0, 0, 0);
         water.waterID = WATER_BACK
+        water.receiveShadow = true;
         water.rotation.x = - Math.PI / 2;  
         scene.add(water)
     
@@ -215,6 +218,7 @@ function createTerrains(scene){
             waterNormals: new THREE.TextureLoader().load( 'assets/waternormals.jpg', function ( texture ) {
                 
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                texture.receiveShadow = true;
                 
             } ),
             waterColor: 0xbbbbb,
@@ -226,6 +230,7 @@ function createTerrains(scene){
         water_2.waterID = WATER_FRONT
         water_2.position.set(0, 0, 0 - planeSize);
         water_2.rotation.x = - Math.PI / 2;
+        water_2.receiveShadow = true;
         scene.add(water_2)
         
 }

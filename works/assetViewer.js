@@ -98,7 +98,13 @@ import {initRenderer,
             enemy1.rotateY(degToReg(0))
         })  
 
-
+        loader.load('assets/rocket.glb', function(gltf){
+          let missil22 = gltf.scene
+          scene.add(missil22)
+          missil22.position.set(-40, 5, 0)
+          missil22.scale.set(0.5, 0.5, 0.5)
+          missil22.rotateY(degToReg(90))
+      })
 
 
 

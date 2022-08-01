@@ -142,7 +142,13 @@ button.addEventListener("click", onButtonPressed);
 
 
 
-  function onButtonPressed() {    
+  function onButtonPressed() { 
+    // Change the "Submit" text
+    button.innerHTML = 'Por favor aguarde...';
+
+    // Disable the submit button
+    button.setAttribute('disabled', 'disabled');
+
     const loadingScreen = document.getElementById( 'loading-screen' );
     loadingScreen.transition = 0;
     backgroundmusic();
@@ -352,7 +358,7 @@ scene.isPlay = false;
 
 let screenX = window.screen.availWidth;
 
-if(screenX>400) scene.plataforma = "pc";
+if(screenX>600) scene.plataforma = "pc";
 else scene.plataforma = "mobile";
 
 addJoysticks(scene);
